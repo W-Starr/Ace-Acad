@@ -9,6 +9,10 @@ import Dashboard from './pages/Dashboard';
 import Library from './pages/Library';
 import StudyGuide from './pages/StudyGuide';
 import StudyGuidee from './pages/StudyGuidee';
+import Flashcard from "./pages/Flashcard";
+import MockTest from "./pages/MockTest";
+import QuizScreen from './Quizscreen';
+import ReminderScheduler from './Remindersheduler';
 
 // Wrapper to access location outside <BrowserRouter>
 const AppWrapper = () => {
@@ -31,6 +35,10 @@ const AppWrapper = () => {
         <Route path="/library" element={<Library />} />
         <Route path="/studyguide" element={<StudyGuide />} />
         <Route path="/studyguidee" element={<StudyGuidee />} />
+        <Route path="/flashcard" element={<Flashcard />} />
+        <Route path="/mocktest" element={<MockTest />} />
+        <Route path="/quizscreen" element={<QuizScreen />} />
+        <Route path="/remindersheduler" element={<ReminderScheduler />} />
       </Routes>
     </>
   );
