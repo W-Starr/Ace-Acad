@@ -12,10 +12,12 @@ import {
   MapPin,
   Bell
 } from 'lucide-react';
+import QuoteWidget from '../components/QuoteWidget'; 
+
 
 export default function QuizDetailScreen() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 dark:text-white">
       {/* Header */}
       <div className="bg-[#0C1639] text-white">
         <div className="flex items-center justify-between p-4 max-w-4xl mx-auto">
@@ -29,6 +31,10 @@ export default function QuizDetailScreen() {
             <Search size={20} />
           </button>
         </div>
+      </div>
+      {/* Motivational Quote Widget */}
+      <div className="px-4 lg:px-8 mb-6">
+      <QuoteWidget />
       </div>
 
       {/* Quiz Header Card */}
@@ -49,9 +55,9 @@ export default function QuizDetailScreen() {
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 -mt-4">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
           <div className="p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-6">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-6">
               Brief explanation about this quiz
             </h3>
 
@@ -62,8 +68,8 @@ export default function QuizDetailScreen() {
                   <FileText size={20} className="text-white" />
                 </div>
                 <div>
-                  <div className="font-semibold text-gray-800">60 Question</div>
-                  <div className="text-gray-500 text-sm">10 point for a correct answer</div>
+                  <div className="font-semibold text-gray-800 dark:text-white">60 Question</div>
+                  <div className="text-gray-500 dark:text-gray-300 text-sm">10 point for a correct answer</div>
                 </div>
               </div>
 
@@ -72,8 +78,8 @@ export default function QuizDetailScreen() {
                   <Clock size={20} className="text-white" />
                 </div>
                 <div>
-                  <div className="font-semibold text-gray-800">1 hour 15 min</div>
-                  <div className="text-gray-500 text-sm">Total duration of the quiz</div>
+                  <div className="font-semibold text-gray-800 dark:text-white">1 hour 15 min</div>
+                  <div className="text-gray-500 dark:text-gray-300 text-sm">Total duration of the quiz</div>
                 </div>
               </div>
 
@@ -82,19 +88,19 @@ export default function QuizDetailScreen() {
                   <Star size={20} className="text-white" />
                 </div>
                 <div>
-                  <div className="font-semibold text-gray-800">Win 60 star</div>
-                  <div className="text-gray-500 text-sm">Answer all questions correctly</div>
+                  <div className="font-semibold text-gray-800 dark:text-white">Win 60 star</div>
+                  <div className="text-gray-500 dark:text-gray-300 text-sm">Answer all questions correctly</div>
                 </div>
               </div>
             </div>
 
             {/* Instructions */}
             <div className="mb-8">
-              <p className="text-gray-700 font-medium mb-4">
+              <p className="text-gray-700 dark:text-gray-200 font-medium mb-4">
                 Please read the text below carefully so you can understand it
               </p>
 
-              <ul className="space-y-3 text-gray-600">
+              <ul className="space-y-3 text-gray-600 dark:text-gray-300">
                 <li className="flex items-start gap-2">
                   <div className="w-2 h-2 bg-gray-400 rounded-full mt-2 flex-shrink-0"></div>
                   <span>1 point given for a correct answer and no marks for an incorrect answer</span>
@@ -123,25 +129,25 @@ export default function QuizDetailScreen() {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2">
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-2">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-around">
-            <button className="flex flex-col items-center gap-1 p-2 text-[#0C1639]">
+            <button className="flex flex-col items-center gap-1 p-2 text-[#0C1639] dark:text-white">
               <Home size={24} />
             </button>
-            <button className="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-600">
+            <button className="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
               <Book size={24} />
             </button>
-            <button className="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-600">
+            <button className="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
               <Users size={24} />
             </button>
-            <button className="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-600">
+            <button className="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
               <Instagram size={24} />
             </button>
-            <button className="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-600">
+            <button className="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
               <MapPin size={24} />
             </button>
-            <button className="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-600">
+            <button className="flex flex-col items-center gap-1 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
               <Bell size={24} />
             </button>
           </div>

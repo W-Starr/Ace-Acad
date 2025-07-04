@@ -11,8 +11,10 @@ import StudyGuide from './pages/StudyGuide';
 import StudyGuidee from './pages/StudyGuidee';
 import Flashcard from "./pages/Flashcard";
 import MockTest from "./pages/MockTest";
-import QuizScreen from './Quizscreen';
+import QuizScreen from './pages/Quizscreen';
 import ReminderScheduler from './Remindersheduler';
+import ForgotPassword from "./pages/ForgotPassword";
+import BookSummary from './pages/BookSummary';
 
 // Wrapper to access location outside <BrowserRouter>
 const AppWrapper = () => {
@@ -39,6 +41,8 @@ const AppWrapper = () => {
         <Route path="/mocktest" element={<MockTest />} />
         <Route path="/quizscreen" element={<QuizScreen />} />
         <Route path="/remindersheduler" element={<ReminderScheduler />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/summary/:bookId" element={<BookSummary />} />
       </Routes>
     </>
   );

@@ -28,22 +28,20 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col items-center justify-center p-4 transition-colors">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
         
-        {/* Header with Logo + Title */}
-        <div className="bg-white px-6 pt-8 pb-6 text-center">
-          {/* ✅ Logo Image */}
+        {/* Header */}
+        <div className="bg-white dark:bg-gray-800 px-6 pt-8 pb-6 text-center">
           <img
             src="/logo.jpg"
             alt="Ace-Acad Logo"
             className="h-20 mx-auto mb-4"
           />
-
-          <h1 className="text-lg font-semibold text-[#0C1639] mb-2">
+          <h1 className="text-lg font-semibold text-[#0C1639] dark:text-white mb-2">
             Fill out this form
           </h1>
-          <p className="text-sm text-gray-600">Please complete your information</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Please complete your information</p>
         </div>
 
         {/* Form */}
@@ -62,13 +60,13 @@ const Signup = () => {
                 name={field.name}
                 value={formData[field.name]}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-200 rounded-md text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0C1639] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0C1639] focus:border-transparent"
                 placeholder={field.placeholder}
               />
             </div>
           ))}
 
-          {/* Faculty, Department, Level Selects */}
+          {/* Dropdowns */}
           {[
             {
               name: "faculty",
@@ -88,7 +86,7 @@ const Signup = () => {
                 name={name}
                 value={formData[name]}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-200 rounded-md text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0C1639] focus:border-transparent bg-white"
+                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#0C1639] focus:border-transparent"
               >
                 <option value="" disabled>{name.charAt(0).toUpperCase() + name.slice(1)}</option>
                 {options.map((option) => (
@@ -108,9 +106,9 @@ const Signup = () => {
               id="terms"
               checked={formData.agreeToTerms}
               onChange={handleInputChange}
-              className="mt-1 h-4 w-4 text-[#0C1639] focus:ring-[#0C1639] border-gray-300 rounded"
+              className="mt-1 h-4 w-4 text-[#0C1639] focus:ring-[#0C1639] border-gray-300 rounded dark:bg-gray-800 dark:border-gray-600"
             />
-            <label htmlFor="terms" className="text-sm text-gray-700 leading-tight">
+            <label htmlFor="terms" className="text-sm text-gray-700 dark:text-gray-300 leading-tight">
               By creating an account, you agree to our Terms
             </label>
           </div>
@@ -124,10 +122,10 @@ const Signup = () => {
             Continue
           </button>
 
-          {/* Sign in Link */}
-          <p className="text-center text-sm text-gray-600 mt-4">
+          {/* Sign In Link */}
+          <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
             Already have an account?{' '}
-            <a href="/login" className="text-[#0C1639] hover:underline font-medium">
+            <a href="/login" className="text-[#0C1639] dark:text-blue-400 hover:underline font-medium">
               Sign in
             </a>
           </p>
