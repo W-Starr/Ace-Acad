@@ -1,42 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import {
   Bell, Plus, Minus, Play,
-  Home, BookOpen, Users,
-  MessageCircle, User, Search
+  User
 } from 'lucide-react';
 import QuoteWidget from '../components/QuoteWidget';
 import LearningSkeleton from '../components/LearningSkeleton';
+import API from '../api/api';
 
 
 const LearningDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
+  const [questItems, setQuestItems] = useState([]);
+  const [steps, setSteps] = useState([]);
 
-  const questItems = [
-    { id: 1, code: 'MCM302', color: 'bg-red-500', icon: '📊' },
-    { id: 2, code: 'EEE202', color: 'bg-blue-500', icon: '⚡' },
-    { id: 3, code: 'Quiz', color: 'bg-purple-500', icon: '❓' },
-    { id: 4, code: 'MAT304', color: 'bg-red-500', icon: '📐' },
-    { id: 5, code: 'PHY Cards', color: 'bg-blue-600', icon: '🔬' }
-  ];
-
-  const steps = [
-    {
-      id: 1,
-      title: "Step 1",
-      description: "Read Chapter 12 of Advanced Engineering Mathematics by K.A. Stroud and skip 'Determinants by rank' on page 167"
-    },
-    {
-      id: 2,
-      title: "Step 2",
-      description: "Read Chapter 10 of Advanced Engineering Mathematics by K.A. Stroud and watch the YouTube video for solving a 2x2 Matrix."
-    }
-  ];
-
-  // Simulate loading delay
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => clearTimeout(timer);
+    const fetchData = async () => {
+      try {
+        const [questsRes, stepsRes] = await Promise.all([
+          API.get('/api/study/quests'),
+          API.get('/api/study/steps'),
+        ]);
+
+        setQuestItems(questsRes.data);
+        setSteps(stepsRes.data);
+      } catch (error) {
+        console.error('Error fetching study guide data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   if (isLoading) {
@@ -98,7 +93,6 @@ const LearningDashboard = () => {
 
       {/* Main Content */}
       <div className="px-4 md:px-8 md:grid md:grid-cols-3 md:gap-8">
-        {/* Left Column */}
         <div className="md:col-span-2">
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-6">
             <div className="flex items-start justify-between mb-4">
@@ -115,7 +109,6 @@ const LearningDashboard = () => {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex space-x-3 mb-6">
               <button className="flex-1 bg-red-500 text-white rounded-xl py-3 px-4 flex items-center justify-center space-x-2 font-semibold">
                 <Play className="w-5 h-5" />
@@ -130,7 +123,6 @@ const LearningDashboard = () => {
               </button>
             </div>
 
-            {/* Steps */}
             <div className="space-y-4">
               {steps.map((step) => (
                 <div key={step.id} className={`flex items-start space-x-3 p-4 rounded-xl transition-colors ${
@@ -152,11 +144,9 @@ const LearningDashboard = () => {
                 </div>
               ))}
             </div>
+
           </div>
         </div>
-
-        {/* Right Column (Today's Progress, optional) */}
-        {/* You can insert a progress component or leave blank */}
       </div>
     </div>
   );

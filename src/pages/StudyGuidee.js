@@ -1,29 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Menu, Search, User, Play, Clock, CheckCircle, Calendar,
-  Home, BookOpen, Users, MessageCircle, Bell, Grid3X3
+  Menu, Search, User, Play, CheckCircle, Grid3X3,
+  Home, BookOpen, Users, MessageCircle, Bell
 } from 'lucide-react';
 import QuoteWidget from '../components/QuoteWidget';
 import EmptyState from '../components/EmptyState';
 import StudySkeleton from '../components/StudySkeleton';
+import API from '../api/api';
+
 
 const StudyGuidePage = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
+  const [progressStats, setProgressStats] = useState([]);
+  const [studyItems, setStudyItems] = useState([]);
 
-  const progressStats = [ /* same as before */ ];
-  const studyItems = [ /* same as before */ ];
+  // Fetch data from the backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsRes, guidesRes] = await Promise.all([
+          API.get('/api/study/progress-stats'),
+          API.get('/api/study/guides')
+        ]);
+        setProgressStats(statsRes.data);
+        setStudyItems(guidesRes.data);
+      } catch (err) {
+        console.error("Error loading study guide:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const filteredItems = studyItems.filter(item => {
     if (activeFilter === 'all') return true;
     return item.status === activeFilter;
   });
-
-  // Simulate loading
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
 
   if (isLoading) {
     return (
@@ -44,6 +59,7 @@ const StudyGuidePage = () => {
             <User className="w-6 h-6 text-blue-600 dark:text-white" />
           </div>
         </div>
+
         {/* Search */}
         <div className="relative mb-6">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -53,10 +69,12 @@ const StudyGuidePage = () => {
             className="w-full pl-10 pr-4 py-3 bg-blue-50 dark:bg-gray-700 dark:text-white rounded-lg border-none outline-none text-gray-700 placeholder-gray-500 dark:placeholder-gray-300"
           />
         </div>
-        {/* Quote */}
+
+        {/* Quote Widget */}
         <div className="px-4 lg:px-8 mb-6">
           <QuoteWidget />
         </div>
+
         {/* Progress Stats */}
         <div className="grid grid-cols-3 gap-4 mb-6">
           {progressStats.map((stat, i) => (
@@ -75,30 +93,35 @@ const StudyGuidePage = () => {
         </div>
       </div>
 
-      {/* Filter Tabs */}
+      {/* Study Filter Tabs */}
       <div className="px-4 mb-4 md:px-8">
         <div className="flex space-x-2 overflow-x-auto">
-          {[ /* same filter buttons as before */ ].map(filter => (
+          {[
+            { key: 'all', label: 'All' },
+            { key: 'in-progress', label: 'In Progress' },
+            { key: 'completed', label: 'Completed' },
+            { key: 'not-started', label: 'Not Started' }
+          ].map(filter => (
             <button
               key={filter.key}
               onClick={() => setActiveFilter(filter.key)}
               className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors
                 ${activeFilter === filter.key ? 'bg-blue-500 text-white' : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600'}`}
             >
-              {filter.label} ({filter.count})
+              {filter.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Grid Toggle */}
+      {/* Grid Toggle Button */}
       <div className="px-4 mb-4 flex justify-end md:px-8">
         <button className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
           <Grid3X3 className="w-5 h-5 text-gray-600 dark:text-gray-300" />
         </button>
       </div>
 
-      {/* Study Items */}
+      {/* Study Cards */}
       <div className="px-4 space-y-4 md:px-8 md:grid md:grid-cols-2 md:gap-6 md:space-y-0 lg:grid-cols-3">
         {filteredItems.length === 0 ? (
           <div className="col-span-full">

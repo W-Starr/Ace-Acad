@@ -1,9 +1,27 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import API from '../api/api';
+
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data); // Replace with API call later
+
+  const onSubmit = async (data) => {
+    try {
+      const res = await API.post("/api/login", {
+        email: data.email,
+        password: data.password,
+      });
+
+      alert(res.data.message); // e.g., 'Login successful!'
+      // Optionally store user data or navigate
+      // Example: localStorage.setItem("user", JSON.stringify(res.data));
+      // navigate("/dashboard");
+    } catch (error) {
+      alert(error.response?.data?.message || "Login failed");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 font-gilroy">

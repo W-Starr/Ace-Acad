@@ -1,65 +1,65 @@
-// src/pages/LibraryApp.jsx 
-
+// src/pages/LibraryApp.jsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Menu, Home, BookOpen, User, MessageCircle, Users, Bell } from 'lucide-react';
 import QuoteWidget from '../components/QuoteWidget';
 import EmptyState from '../components/EmptyState';
 import BookSkeleton from '../components/BookSkeleton';
+import API from '../api/api';
+
+
+const colorMap = {
+  blue: {
+    bg: 'bg-blue-100 dark:bg-blue-900',
+    text: 'text-blue-900 dark:text-blue-100'
+  },
+  teal: {
+    bg: 'bg-teal-100 dark:bg-teal-800',
+    text: 'text-teal-900 dark:text-teal-100'
+  },
+  red: {
+    bg: 'bg-red-100 dark:bg-red-800',
+    text: 'text-red-900 dark:text-red-100'
+  },
+  green: {
+    bg: 'bg-green-100 dark:bg-green-800',
+    text: 'text-green-900 dark:text-green-100'
+  },
+  gray: {
+    bg: 'bg-gray-200 dark:bg-gray-800',
+    text: 'text-gray-900 dark:text-white'
+  }
+};
 
 const LibraryApp = () => {
   const [activeTab, setActiveTab] = useState('Suggested read');
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  const books = [
-    {
-      id: 1,
-      title: "Fundamentals of Car Production",
-      author: "Turbo A. T. E.",
-      progress: 53,
-      edition: "First Edition",
-      color: "bg-blue-100 dark:bg-blue-900",
-      textColor: "text-blue-900 dark:text-blue-100"
-    },
-    {
-      id: 2,
-      title: "Electronics",
-      author: "Meehan B. Z.",
-      progress: 53,
-      edition: "First Edition",
-      color: "bg-teal-100 dark:bg-teal-800",
-      textColor: "text-teal-900 dark:text-teal-100"
-    },
-    {
-      id: 3,
-      title: "How to Draw",
-      author: "Benjamin G. Y.",
-      progress: 10,
-      edition: "First Edition",
-      color: "bg-red-100 dark:bg-red-800",
-      textColor: "text-red-900 dark:text-red-100"
-    },
-    {
-      id: 4,
-      title: "Technology",
-      author: "Ishigami Senku",
-      progress: 99,
-      edition: "First Edition",
-      color: "bg-teal-600 dark:bg-teal-700",
-      textColor: "text-white"
-    }
-  ];
+  const [books, setBooks] = useState([]);
 
   const tabs = ['Suggested read', 'Textbooks', 'Handouts'];
 
+  useEffect(() => {
+    API.get('/library/books')
+      .then(res => {
+        const data = res.data;
+        const coloredBooks = data.map(book => {
+          const { bg, text } = colorMap[book.color] || colorMap.gray;
+          return {
+            ...book,
+            color: bg,
+            textColor: text
+          };
+        });
+        setBooks(coloredBooks);
+      })
+      .catch(err => {
+        console.error('Failed to fetch books:', err);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <div className="w-full max-w-sm mx-auto bg-gray-50 dark:bg-gray-900 min-h-screen md:max-w-4xl lg:max-w-6xl text-gray-900 dark:text-gray-100">
-      
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 md:px-8">
         <Menu className="w-6 h-6 text-gray-700 dark:text-gray-200" />
@@ -105,7 +105,7 @@ const LibraryApp = () => {
         </div>
       </div>
 
-      {/* Books Section */}
+      {/* Books */}
       <div className="px-4 md:px-8">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -146,10 +146,7 @@ const LibraryApp = () => {
                     </div>
                     <div className="ml-4 flex-shrink-0">
                       <div className={`w-16 h-16 ${book.textColor} opacity-30 text-2xl md:w-20 md:h-20 md:text-3xl`}>
-                        {book.id === 1 && '🚗'}
-                        {book.id === 2 && '💻'}
-                        {book.id === 3 && '🎨'}
-                        {book.id === 4 && '🔬'}
+                        {book.icon}
                       </div>
                     </div>
                   </div>
@@ -163,29 +160,29 @@ const LibraryApp = () => {
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 md:max-w-4xl lg:max-w-6xl">
         <div className="flex justify-around py-3 md:justify-center md:space-x-8">
-          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-y-0 md:space-x-2">
+          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-x-2">
             <Home className="w-6 h-6 text-gray-700 dark:text-white" />
-            <span className="hidden md:block text-sm text-gray-700 dark:text-white">Home</span>
+            <span className="hidden md:block text-sm">Home</span>
           </button>
-          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-y-0 md:space-x-2">
+          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-x-2">
             <BookOpen className="w-6 h-6 text-gray-400 dark:text-gray-300" />
-            <span className="hidden md:block text-sm text-gray-400 dark:text-gray-300">Books</span>
+            <span className="hidden md:block text-sm">Books</span>
           </button>
-          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-y-0 md:space-x-2">
+          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-x-2">
             <Users className="w-6 h-6 text-gray-400 dark:text-gray-300" />
-            <span className="hidden md:block text-sm text-gray-400 dark:text-gray-300">Community</span>
+            <span className="hidden md:block text-sm">Community</span>
           </button>
-          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-y-0 md:space-x-2">
+          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-x-2">
             <MessageCircle className="w-6 h-6 text-gray-400 dark:text-gray-300" />
-            <span className="hidden md:block text-sm text-gray-400 dark:text-gray-300">Messages</span>
+            <span className="hidden md:block text-sm">Messages</span>
           </button>
-          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-y-0 md:space-x-2">
+          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-x-2">
             <User className="w-6 h-6 text-red-500" />
             <span className="hidden md:block text-sm text-red-500">Profile</span>
           </button>
-          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-y-0 md:space-x-2">
+          <button className="flex flex-col items-center space-y-1 md:flex-row md:space-x-2">
             <Bell className="w-6 h-6 text-gray-400 dark:text-gray-300" />
-            <span className="hidden md:block text-sm text-gray-400 dark:text-gray-300">Notifications</span>
+            <span className="hidden md:block text-sm">Notifications</span>
           </button>
         </div>
       </div>

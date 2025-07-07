@@ -14,9 +14,9 @@ import MockTest from "./pages/MockTest";
 import QuizScreen from './pages/Quizscreen';
 import ReminderScheduler from './Remindersheduler';
 import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword"; // ✅ Added
 import BookSummary from './pages/BookSummary';
 
-// Wrapper to access location outside <BrowserRouter>
 const AppWrapper = () => {
   const location = useLocation();
   const [showNavbar, setShowNavbar] = useState(true);
@@ -42,6 +42,7 @@ const AppWrapper = () => {
         <Route path="/quizscreen" element={<QuizScreen />} />
         <Route path="/remindersheduler" element={<ReminderScheduler />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} /> {/* ✅ New route */}
         <Route path="/summary/:bookId" element={<BookSummary />} />
       </Routes>
     </>

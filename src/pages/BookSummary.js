@@ -1,20 +1,40 @@
 // src/pages/BookSummary.js
-import React from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import API from '../api/api';
+
 
 const BookSummary = () => {
   const { bookId } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const book = location.state;
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    API.get(`/books/${bookId}`)
+      .then((res) => setBook(res.data))
+      .catch((err) => {
+        console.error('Error fetching book:', err);
+        setBook(null);
+      })
+      .finally(() => setLoading(false));
+  }, [bookId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-center bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white">
+        <p className="text-lg">Loading book summary...</p>
+      </div>
+    );
+  }
 
   if (!book) {
     return (
       <div className="min-h-screen flex items-center justify-center text-center bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white">
         <div>
-          <p className="text-lg mb-2">No book data was passed.</p>
+          <p className="text-lg mb-2">Unable to load book data.</p>
           <button
             onClick={() => navigate(-1)}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
@@ -50,7 +70,7 @@ const BookSummary = () => {
           <span className={`text-xs ${book.textColor}`}>{book.progress}% Completed</span>
         </div>
         <p className="text-sm mt-4 text-gray-700 dark:text-gray-200">
-          This is a placeholder for the book's description. You can add notes, chapter breakdowns, or summaries here.
+          {book.description}
         </p>
       </div>
     </div>
